@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vihan Sharma · Mattel Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FAFAFA;
+    --white: #FFFFFF;
+    --ink: #111111;
+    --ink-mid: #333333;
+    --ink-light: #888888;
+    --mat-red: #E8112D;
+    --mat-blue: #0057A8;
+    --mat-yellow: #FFD100;
+    --mat-green: #00A651;
+    --red-dim: rgba(232,17,45,0.08);
+    --red-mid: rgba(232,17,45,0.2);
+    --blue-dim: rgba(0,87,168,0.08);
+    --yellow-dim: rgba(255,209,0,0.15);
+    --card-border: #E5E5E5;
+    --section-alt: #F5F5F5;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--ink); font-family: 'Nunito', sans-serif; overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top:0; left:0; right:0; z-index:100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 60px; height: 60px;
+    background: var(--white);
+    border-bottom: 3px solid var(--mat-red);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .nav-logo {
+    font-size: 13px; font-weight: 900; color: var(--mat-red);
+    letter-spacing: 1px; text-transform: uppercase;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .nav-dots { display: flex; gap: 5px; }
+  .nav-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .nav-dot.r { background: var(--mat-red); }
+  .nav-dot.b { background: var(--mat-blue); }
+  .nav-dot.y { background: var(--mat-yellow); }
+  .nav-dot.g { background: var(--mat-green); }
+  .nav-links { display:flex; gap:32px; list-style:none; }
+  .nav-links a { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-mid); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--mat-red); }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    padding: 110px 60px 80px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    align-items: center; gap: 80px;
+    position: relative; overflow: hidden;
+    background: var(--white);
+  }
+
+  /* Colourful shape decorations */
+  .shape-circle {
+    position: absolute; border-radius: 50%;
+    pointer-events: none;
+  }
+  .s1 { width: 300px; height: 300px; background: var(--mat-yellow); opacity: 0.12; top: -80px; right: -60px; }
+  .s2 { width: 180px; height: 180px; background: var(--mat-blue); opacity: 0.08; bottom: 60px; left: -40px; }
+  .shape-star {
+    position: absolute; pointer-events: none;
+    font-size: 120px; opacity: 0.06; color: var(--mat-red);
+    top: 40%; right: 8%; transform: rotate(15deg);
+  }
+
+  .hero-left { position: relative; z-index: 1; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--mat-red); color: var(--white);
+    font-size: 10px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase;
+    padding: 6px 16px; border-radius: 40px; margin-bottom: 24px;
+    opacity: 0; animation: fadeUp 0.6s 0.2s forwards;
+  }
+  .hero-name {
+    font-size: clamp(52px, 7.5vw, 104px); font-weight: 900;
+    line-height: 0.92; letter-spacing: -2px; color: var(--ink);
+    opacity: 0; animation: fadeUp 0.7s 0.35s forwards;
+  }
+  .hero-name span { color: var(--mat-red); }
+  .hero-underline {
+    width: 80px; height: 5px; border-radius: 3px;
+    background: linear-gradient(90deg, var(--mat-red), var(--mat-blue), var(--mat-yellow), var(--mat-green));
+    margin: 20px 0;
+    opacity: 0; animation: fadeUp 0.6s 0.5s forwards;
+  }
+  .hero-desc {
+    font-size: 15px; font-weight: 400; color: var(--ink-mid); line-height: 1.7; max-width: 440px;
+    opacity: 0; animation: fadeUp 0.7s 0.6s forwards;
+  }
+
+  /* Right: stat tiles */
+  .hero-right {
+    position: relative; z-index: 1;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    opacity: 0; animation: fadeUp 0.8s 0.75s forwards;
+  }
+  .stat-tile {
+    border-radius: 16px; padding: 24px 20px;
+    cursor: default; transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .stat-tile:hover { transform: translateY(-4px) rotate(-1deg); box-shadow: 0 12px 32px rgba(0,0,0,0.12); }
+  .st-r { background: var(--mat-red); }
+  .st-b { background: var(--mat-blue); }
+  .st-y { background: var(--mat-yellow); }
+  .st-g { background: var(--mat-green); }
+  .tile-val {
+    font-size: 42px; font-weight: 900; line-height: 1; display: block; margin-bottom: 6px;
+    letter-spacing: -1px;
+  }
+  .st-r .tile-val, .st-b .tile-val, .st-g .tile-val { color: #fff; }
+  .st-y .tile-val { color: var(--ink); }
+  .tile-lbl { font-size: 12px; font-weight: 600; line-height: 1.4; }
+  .st-r .tile-lbl, .st-b .tile-lbl, .st-g .tile-lbl { color: rgba(255,255,255,0.8); }
+  .st-y .tile-lbl { color: rgba(17,17,17,0.65); }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+
+  /* SECTIONS */
+  section { padding: 88px 60px; border-top: 1px solid var(--card-border); position: relative; z-index:1; }
+  section:nth-child(even) { background: var(--section-alt); }
+  .section-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--mat-red); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+  .section-title { font-size: clamp(34px, 4.5vw, 58px); font-weight: 900; line-height: 1.05; color: var(--ink); margin-bottom: 52px; letter-spacing: -1px; }
+  .section-title span { color: var(--mat-red); }
+  .section-title em { color: var(--mat-blue); font-style: normal; }
+
+  /* THE ROLE */
+  .role-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .role-card {
+    background: var(--white); border: 2px solid var(--card-border);
+    border-radius: 16px; padding: 28px; transition: all 0.25s;
+  }
+  .role-card:hover { border-color: var(--mat-red); transform: translateY(-3px); box-shadow: 0 8px 28px rgba(232,17,45,0.08); }
+  .role-emoji { font-size: 32px; display: block; margin-bottom: 14px; }
+  .role-card h3 { font-size: 13px; font-weight: 800; color: var(--ink); margin-bottom: 10px; }
+  .role-card p { font-size: 12.5px; color: var(--ink-light); line-height: 1.65; font-weight: 400; }
+
+  /* WHY I FIT */
+  .fit-wrap { display: flex; flex-direction: column; gap: 0; border: 2px solid var(--ink); border-radius: 16px; overflow: hidden; }
+  .fit-head { display: grid; grid-template-columns: 2fr 3fr; background: var(--ink); }
+  .fit-head div { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.5); padding: 12px 22px; }
+  .fit-head div:first-child { border-right: 1px solid rgba(255,255,255,0.1); }
+  .fit-row { display: grid; grid-template-columns: 2fr 3fr; border-bottom: 1px solid var(--card-border); background: var(--white); transition: background 0.2s; }
+  .fit-row:last-child { border-bottom: none; }
+  .fit-row:hover { background: #FFF5F6; }
+  .fit-jd { padding: 20px 22px; border-right: 1px solid var(--card-border); font-size: 13px; color: var(--ink-mid); line-height: 1.65; font-weight: 600; }
+  .fit-jd strong { color: var(--mat-red); }
+  .fit-ev { padding: 20px 22px; font-size: 13px; color: var(--ink-mid); line-height: 1.65; font-weight: 400; }
+  .mchip {
+    display: inline-block; background: var(--red-dim); border: 1px solid var(--red-mid);
+    color: var(--mat-red); border-radius: 20px; padding: 2px 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
+    margin: 2px 4px 2px 0; white-space: nowrap;
+  }
+
+  /* EXPERIENCE */
+  .exp-wrap { display: flex; flex-direction: column; gap: 20px; }
+  .exp-card { background: var(--white); border: 2px solid var(--card-border); border-radius: 16px; overflow: hidden; transition: border-color 0.3s; }
+  .exp-card:hover { border-color: var(--mat-blue); }
+  .exp-header { padding: 24px 28px; border-bottom: 2px solid var(--card-border); display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; }
+  .exp-co { font-size: 28px; font-weight: 900; color: var(--ink); letter-spacing: -0.5px; }
+  .exp-role { font-size: 12px; color: var(--mat-blue); font-weight: 700; margin-top: 4px; }
+  .exp-tenure { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-light); text-align: right; line-height: 1.7; }
+  .exp-body { padding: 24px 28px; }
+  .outcomes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 22px; }
+  .outcome { border-radius: 12px; padding: 14px; text-align: center; }
+  .o1 { background: var(--red-dim); border: 1px solid var(--red-mid); }
+  .o2 { background: var(--blue-dim); border: 1px solid rgba(0,87,168,0.2); }
+  .o3 { background: var(--yellow-dim); border: 1px solid rgba(255,209,0,0.3); }
+  .o4 { background: rgba(0,166,81,0.08); border: 1px solid rgba(0,166,81,0.2); }
+  .outcome-n { font-size: 26px; font-weight: 900; display: block; line-height: 1; margin-bottom: 3px; }
+  .o1 .outcome-n { color: var(--mat-red); }
+  .o2 .outcome-n { color: var(--mat-blue); }
+  .o3 .outcome-n { color: #B38B00; }
+  .o4 .outcome-n { color: var(--mat-green); }
+  .outcome-l { font-size: 11px; color: var(--ink-light); line-height: 1.35; font-weight: 600; }
+  .bullets { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .bullets li { font-size: 13px; color: var(--ink-mid); line-height: 1.65; font-weight: 400; padding-left: 20px; position: relative; }
+  .bullets li::before { content: '★'; position: absolute; left: 0; color: var(--mat-yellow); font-size: 11px; top: 2px; }
+  .bullets li strong { color: var(--ink); font-weight: 800; }
+
+  /* SKILLS */
+  .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  .skill-block { background: var(--white); border: 2px solid var(--card-border); border-radius: 16px; padding: 28px; transition: border-color 0.3s; }
+  .skill-block:nth-child(1):hover { border-color: var(--mat-red); }
+  .skill-block:nth-child(2):hover { border-color: var(--mat-blue); }
+  .skill-block:nth-child(3):hover { border-color: #B38B00; }
+  .skill-block:nth-child(4):hover { border-color: var(--mat-green); }
+  .skill-tag { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; display: block; }
+  .skill-block:nth-child(1) .skill-tag { color: var(--mat-red); }
+  .skill-block:nth-child(2) .skill-tag { color: var(--mat-blue); }
+  .skill-block:nth-child(3) .skill-tag { color: #B38B00; }
+  .skill-block:nth-child(4) .skill-tag { color: var(--mat-green); }
+  .skill-block h3 { font-size: 16px; font-weight: 900; color: var(--ink); margin-bottom: 18px; padding-bottom: 10px; border-bottom: 2px solid var(--card-border); }
+  .bar-wrap { margin-bottom: 12px; }
+  .bar-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--ink-mid); margin-bottom: 5px; font-weight: 600; }
+  .bar-label span:last-child { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--ink-light); font-weight: 400; }
+  .bar-track { height: 4px; background: var(--card-border); border-radius: 2px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 2px; width: 0; transition: width 1.2s cubic-bezier(0.16,1,0.3,1); }
+  .skill-block:nth-child(1) .bar-fill { background: var(--mat-red); }
+  .skill-block:nth-child(2) .bar-fill { background: var(--mat-blue); }
+  .skill-block:nth-child(3) .bar-fill { background: #C9A000; }
+  .skill-block:nth-child(4) .bar-fill { background: var(--mat-green); }
+
+  /* FOOTER */
+  footer { background: var(--ink); padding: 52px 60px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; }
+  .footer-left .footer-name { font-size: 26px; font-weight: 900; color: var(--white); }
+  .footer-left .footer-sub { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 4px; letter-spacing: 1.5px; }
+  .footer-dots { display: flex; gap: 8px; }
+  .footer-dot { width: 14px; height: 14px; border-radius: 50%; }
+  .footer-dot.r { background: var(--mat-red); }
+  .footer-dot.b { background: var(--mat-blue); }
+  .footer-dot.y { background: var(--mat-yellow); }
+  .footer-dot.g { background: var(--mat-green); }
+  .footer-cta { display: inline-flex; align-items: center; gap: 10px; background: var(--mat-red); color: var(--white); padding: 14px 28px; border-radius: 40px; font-weight: 900; font-size: 13px; letter-spacing: 0.5px; text-decoration: none; transition: all 0.2s; }
+  .footer-cta:hover { background: #C00D26; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(232,17,45,0.35); }
+
+  .reveal { opacity:0; transform:translateY(22px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <div class="nav-dots">
+      <div class="nav-dot r"></div><div class="nav-dot b"></div>
+      <div class="nav-dot y"></div><div class="nav-dot g"></div>
+    </div>
+    VS · Mattel GTO 2026
+  </div>
+  <ul class="nav-links">
+    <li><a href="#role">The Role</a></li>
+    <li><a href="#fit">Why I Fit</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="shape-circle s1"></div>
+  <div class="shape-circle s2"></div>
+  <div class="shape-star">★</div>
+
+  <div class="hero-left">
+    <div class="hero-eyebrow">✦ Application · Product Owner, AI · Mattel GTO · Hyderabad</div>
+    <h1 class="hero-name">VIHAN<br><span>SHARMA</span></h1>
+    <div class="hero-underline"></div>
+    <p class="hero-desc">Product Owner with hands-on Agentic AI delivery, enterprise AI governance, and a track record of championing AI through senior leadership to measurable business impact. Ready to bring creativity to Mattel's AI future.</p>
+  </div>
+
+  <div class="hero-right">
+    <div class="stat-tile st-r">
+      <span class="tile-val">3+</span>
+      <div class="tile-lbl">Years delivering Agentic & GenAI products in production</div>
+    </div>
+    <div class="stat-tile st-b">
+      <span class="tile-val">791K</span>
+      <div class="tile-lbl">Enterprise platform enrolments in 7 months</div>
+    </div>
+    <div class="stat-tile st-y">
+      <span class="tile-val">200K</span>
+      <div class="tile-lbl">Users in A/B experiment — data-driven decisions</div>
+    </div>
+    <div class="stat-tile st-g">
+      <span class="tile-val">1M+</span>
+      <div class="tile-lbl">MAU on consumer platform built from 0→1</div>
+    </div>
+  </div>
+</section>
+
+<!-- THE ROLE -->
+<section id="role">
+  <div class="reveal">
+    <div class="section-label">/ 01 — what I understand about this role</div>
+    <h2 class="section-title">The <span>Role</span></h2>
+    <div class="role-grid">
+      <div class="role-card">
+        <span class="role-emoji">🧠</span>
+        <h3>Enterprise-Wide AI Strategy</h3>
+        <p>This isn't an AI feature role within one product team. Mattel wants someone who can align and manage AI product development across the whole organisation — measuring and communicating business value across multiple AI initiatives simultaneously.</p>
+      </div>
+      <div class="role-card">
+        <span class="role-emoji">💡</span>
+        <h3>Use Case Ideation & Prioritisation</h3>
+        <p>Collaborate with business units across Product Development and Supply Chain — running ideation sessions and hackathons to surface AI opportunities. Then prioritise them. The PM is the bridge between what AI can do and what the business actually needs.</p>
+      </div>
+      <div class="role-card">
+        <span class="role-emoji">🤝</span>
+        <h3>Trusted Advisor to Stakeholders</h3>
+        <p>The role explicitly frames this as being a "trusted advisor" to Product Development and Supply Chain — not a technology vendor, but a partner who understands the business domain deeply enough to recommend the right AI solutions for their specific pain points.</p>
+      </div>
+      <div class="role-card">
+        <span class="role-emoji">🛡️</span>
+        <h3>Responsible AI Principles & Guardrails</h3>
+        <p>Establish Responsible AI principles for Mattel — collaborating with legal, security, compliance, and industry practitioners. This requires understanding both the power and the risk of AI systems, and building governance that enables adoption without creating liability.</p>
+      </div>
+      <div class="role-card">
+        <span class="role-emoji">🚀</span>
+        <h3>Champion AI Through Leadership</h3>
+        <p>Lead insight gathering and champion new AI-powered business models through senior management — this person doesn't just build, they persuade. Driving alignment, securing endorsement, and building organisational confidence in AI adoption are core to the job.</p>
+      </div>
+      <div class="role-card">
+        <span class="role-emoji">🌱</span>
+        <h3>Growth Mindset & Continuous Learning</h3>
+        <p>Mattel lists "growth mindset" twice in the job description — not an accident. They want someone genuinely curious about AI, who stays current, embraces challenges, and brings energy to the work. The AI landscape changes fast; this role demands someone who keeps up.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY I FIT -->
+<section id="fit">
+  <div class="reveal">
+    <div class="section-label">/ 02 — evidence mapped to requirements</div>
+    <h2 class="section-title">Why I <span>Fit</span></h2>
+    <div class="fit-wrap">
+      <div class="fit-head">
+        <div>Mattel Requirement</div>
+        <div>My Evidence</div>
+      </div>
+      <div class="fit-row">
+        <div class="fit-jd">"Experience in building and scaling <strong>platforms and capabilities leveraging Generative and Agentic AI</strong> for Enterprises"</div>
+        <div class="fit-ev">Built and shipped production multi-agent LLM pipelines at Deloitte Digital — three interconnected agents covering story creation, documentation generation, and QA test authoring, with human-in-the-loop review at every stage. This is live enterprise tooling, not a prototype. <span class="mchip">Production Agentic AI</span> <span class="mchip">MCP integration</span></div>
+      </div>
+      <div class="fit-row">
+        <div class="fit-jd">"Establish <strong>Responsible AI Principles</strong> and guardrails by collaborating with Legal and security compliance teams"</div>
+        <div class="fit-ev">Authored Deloitte Digital's GenAI Adoption Playbook — defined Responsible AI guardrails, human-in-the-loop design principles, output review standards, and governance frameworks for enterprise AI tool adoption across consulting delivery teams. <span class="mchip">GenAI Playbook authored</span> <span class="mchip">HITL architecture</span></div>
+      </div>
+      <div class="fit-row">
+        <div class="fit-jd">"Collaborate with business units to understand needs through <strong>ideation sessions, hackathons</strong>, and prioritise use cases"</div>
+        <div class="fit-ev">Led structured AI ideation workshops with cross-functional product and engineering teams — facilitated use case surfacing, evaluated feasibility against existing AI capabilities, and built a prioritised adoption roadmap that was endorsed by practice leadership. <span class="mchip">AI ideation workshops</span> <span class="mchip">Use case prioritisation</span></div>
+      </div>
+      <div class="fit-row">
+        <div class="fit-jd">"<strong>Champion AI initiatives through senior management</strong> and cross-functional teams for approval and endorsement"</div>
+        <div class="fit-ev">Presented AI delivery strategy and business case to Deloitte Digital's practice leadership — secured endorsement, drove org-wide rollout of agentic tooling, and influenced investment in AI adoption across multiple delivery teams. <span class="mchip">Leadership endorsement secured</span> <span class="mchip">Org-wide rollout</span></div>
+      </div>
+      <div class="fit-row">
+        <div class="fit-jd">"<strong>Measure and communicate business value</strong> delivered through various AI initiatives"</div>
+        <div class="fit-ev">Measured AI pipeline impact concretely: QA test authoring reduced from one week to hours across a 4-person PM team. Tracked adoption, output quality, and review overhead — communicated results to leadership with clear before/after metrics. <span class="mchip">Week → hours QA authoring</span> <span class="mchip">4-person team impact</span></div>
+      </div>
+      <div class="fit-row">
+        <div class="fit-jd">"Demonstrated <strong>growth mindset</strong> — continuously learning, embracing challenges, improving themselves"</div>
+        <div class="fit-ev">Building My Story Hero — an AI-powered personalised children's storybook platform — as a personal side project using Next.js, Supabase, Replicate Flux, Razorpay, and the Claude API. Learning by building, on my own time, because the frontier of what's possible genuinely excites me. <span class="mchip">Side project: My Story Hero</span> <span class="mchip">Claude API · Flux · Next.js</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="reveal">
+    <div class="section-label">/ 03 — where I built this</div>
+    <h2 class="section-title"><span>Experience</span></h2>
+    <div class="exp-wrap">
+      <div class="exp-card">
+        <div class="exp-header">
+          <div>
+            <div class="exp-co">Deloitte Digital</div>
+            <div class="exp-role">Product Manager II · Enterprise AI Strategy & Platform Delivery</div>
+          </div>
+          <div class="exp-tenure">Dec 2020 – Present<br>Hyderabad, India</div>
+        </div>
+        <div class="exp-body">
+          <div class="outcomes">
+            <div class="outcome o1"><span class="outcome-n">3+</span><div class="outcome-l">Years Agentic AI in production</div></div>
+            <div class="outcome o2"><span class="outcome-n">791K</span><div class="outcome-l">Platform enrolments · 7 months</div></div>
+            <div class="outcome o3"><span class="outcome-n">200K</span><div class="outcome-l">A/B experiment cohort</div></div>
+            <div class="outcome o4"><span class="outcome-n">4</span><div class="outcome-l">Product owners mentored</div></div>
+          </div>
+          <ul class="bullets">
+            <li>Designed and delivered <strong>enterprise-wide Agentic AI strategy</strong> — assessed SDLC use cases, built prioritised adoption roadmap, shipped production multi-agent LLM pipelines, and authored the GenAI Adoption Playbook with Responsible AI guardrails.</li>
+            <li>Championed AI adoption <strong>through senior leadership</strong> — presented strategy and business case, secured endorsement, drove org-wide rollout across multiple delivery teams.</li>
+            <li>Facilitated <strong>AI ideation workshops</strong> with cross-functional product and engineering teams — surface use cases, evaluate feasibility, prioritise adoption roadmap.</li>
+            <li>Led platform delivery for a <strong>220+ site enterprise transformation</strong> — 791K enrolments in 7 months, 200K-user A/B experimentation, +5% engagement frequency uplift.</li>
+            <li>Mentored 4 product owners; influenced executive stakeholders through data-backed business cases on product investment decisions.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="exp-card">
+        <div class="exp-header">
+          <div>
+            <div class="exp-co">My Story Hero <span style="font-size:14px;font-weight:600;color:#888"> — Side Project</span></div>
+            <div class="exp-role">Founder · AI-Powered Personalised Children's Storybook Platform · In Development</div>
+          </div>
+          <div class="exp-tenure">2026 – Present<br>Self-directed</div>
+        </div>
+        <div class="exp-body">
+          <ul class="bullets">
+            <li>Building an <strong>AI-powered personalised storybook platform</strong> for the Indian children's market — using Next.js 14, Supabase, Replicate Flux for image generation, Razorpay for payments, and the Claude API for story generation.</li>
+            <li>Demonstrates <strong>hands-on growth mindset</strong>: learning by building at the frontier of Agentic AI, multimodal LLMs, and consumer product delivery entirely on personal time.</li>
+            <li>Directly relevant to Mattel's creative + AI intersection — applying generative AI to create personalised experiences for children through play and storytelling.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="exp-card">
+        <div class="exp-header">
+          <div>
+            <div class="exp-co">QuaQua</div>
+            <div class="exp-role">Product Owner · Consumer Engagement Platform · 4th Founding Member</div>
+          </div>
+          <div class="exp-tenure">Dec 2016 – Nov 2020<br>Hyderabad, India</div>
+        </div>
+        <div class="exp-body">
+          <div class="outcomes">
+            <div class="outcome o1"><span class="outcome-n">1M+</span><div class="outcome-l">MAU in year one</div></div>
+            <div class="outcome o2"><span class="outcome-n">+28%</span><div class="outcome-l">Session duration</div></div>
+            <div class="outcome o3"><span class="outcome-n">660+</span><div class="outcome-l">Days personalised content</div></div>
+            <div class="outcome o4"><span class="outcome-n">110</span><div class="outcome-l">Cities covered</div></div>
+          </div>
+          <ul class="bullets">
+            <li>Built consumer engagement platform <strong>0→1 to 1M+ MAU</strong> in year one — owned full product lifecycle as founding PM.</li>
+            <li>Directed <strong>personalised content engine</strong> across 110 cities — early-stage algorithmic content delivery at consumer scale, forerunner to today's AI recommendation systems.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="reveal">
+    <div class="section-label">/ 04 — what I bring</div>
+    <h2 class="section-title"><span>Skills</span></h2>
+    <div class="skills-grid">
+      <div class="skill-block">
+        <span class="skill-tag">AI Core</span>
+        <h3>Agentic & Generative AI</h3>
+        <div class="bar-wrap"><div class="bar-label"><span>Multi-Agent LLM Pipeline Design</span><span>EXPERT</span></div><div class="bar-track"><div class="bar-fill" data-width="93"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>MCP Integration & VS Code Agents</span><span>EXPERT</span></div><div class="bar-track"><div class="bar-fill" data-width="91"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>Human-in-the-Loop Architecture</span><span>EXPERT</span></div><div class="bar-track"><div class="bar-fill" data-width="90"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>Prompt Engineering</span><span>EXPERT</span></div><div class="bar-track"><div class="bar-fill" data-width="89"></div></div></div>
+      </div>
+      <div class="skill-block">
+        <span class="skill-tag">Strategy</span>
+        <h3>AI Strategy & Governance</h3>
+        <div class="bar-wrap"><div class="bar-label"><span>Enterprise AI Adoption Roadmapping</span><span>EXPERT</span></div><div class="bar-track"><div class="bar-fill" data-width="91"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>Responsible AI Principles & Guardrails</span><span>EXPERT</span></div><div class="bar-track"><div class="bar-fill" data-width="88"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>Use Case Ideation & Prioritisation</span><span>EXPERT</span></div><div class="bar-track"><div class="bar-fill" data-width="90"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>AI Business Value Measurement</span><span>ADVANCED</span></div><div class="bar-track"><div class="bar-fill" data-width="84"></div></div></div>
+      </div>
+      <div class="skill-block">
+        <span class="skill-tag">Product</span>
+        <h3>Product Management</h3>
+        <div class="bar-wrap"><div class="bar-label"><span>Full Product Lifecycle Ownership</span><span>EXPERT</span></div><div class="bar-track"><div class="bar-fill" data-width="95"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>Roadmapping & Prioritisation</span><span>EXPERT</span></div><div class="bar-track"><div class="bar-fill" data-width="93"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>Cross-Functional Leadership</span><span>EXPERT</span></div><div class="bar-track"><div class="bar-fill" data-width="92"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>Executive Stakeholder Management</span><span>EXPERT</span></div><div class="bar-track"><div class="bar-fill" data-width="91"></div></div></div>
+      </div>
+      <div class="skill-block">
+        <span class="skill-tag">Foundations</span>
+        <h3>Data & Delivery</h3>
+        <div class="bar-wrap"><div class="bar-label"><span>A/B Experiment Design & Analysis</span><span>EXPERT</span></div><div class="bar-track"><div class="bar-fill" data-width="92"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>KPI Frameworks & Metrics Ownership</span><span>EXPERT</span></div><div class="bar-track"><div class="bar-fill" data-width="91"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>Figma · Jira · Agile / SAFe</span><span>EXPERT</span></div><div class="bar-track"><div class="bar-fill" data-width="90"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>SQL · Mixpanel · GA4</span><span>ADVANCED</span></div><div class="bar-track"><div class="bar-fill" data-width="83"></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-left">
+    <div class="footer-name">Vihan Sharma</div>
+    <div class="footer-sub">HYDERABAD, INDIA · VIHAN1691@GMAIL.COM</div>
+  </div>
+  <div class="footer-dots">
+    <div class="footer-dot r"></div><div class="footer-dot b"></div>
+    <div class="footer-dot y"></div><div class="footer-dot g"></div>
+  </div>
+  <a href="mailto:vihan1691@gmail.com" class="footer-cta">Get in Touch ✦</a>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        e.target.querySelectorAll('.bar-fill').forEach(b => {
+          setTimeout(() => { b.style.width = b.dataset.width + '%'; }, 250);
+        });
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(r => observer.observe(r));
+</script>
+</body>
+</html>
